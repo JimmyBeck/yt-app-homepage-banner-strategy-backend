@@ -290,14 +290,14 @@
         <!-- 模拟新增/编辑弹窗 -->
         <el-dialog v-model="dialogVisible" title="编辑推荐页头图广告" width="700px" top="5vh" :close-on-click-modal="false">
             <el-form :model="form" label-width="110px" class="pr-4">
-                <el-form-item label="广告名称" required>
+                <el-form-item label="广告名称" required :error="formErrors.name">
                     <div class="w-full">
                         <el-input v-model="form.name" placeholder="请输入广告名称" maxlength="10" show-word-limit></el-input>
                         <div class="text-xs text-gray-400 mt-1">*仅用于后台系统人员查看，前端不展示</div>
                     </div>
                 </el-form-item>
                 
-                <el-form-item label="上传图片" required>
+                <el-form-item label="上传图片" required :error="formErrors.image">
                     <div class="w-full">
                         <div class="border border-dashed border-gray-300 rounded p-2 bg-gray-50 w-full flex justify-center items-center relative overflow-hidden group" style="height: 180px;">
                             <img v-if="form.image" :src="form.image" class="h-full object-contain" />
@@ -321,25 +321,25 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="跳转路径" required>
+                <el-form-item label="跳转路径" required :error="formErrors.jumpPath">
                     <el-select v-model="form.jumpPath" class="w-full">
                         <el-option label="链接" value="link"></el-option>
                         <el-option label="课程" value="course"></el-option>
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="跳转链接" required>
+                <el-form-item label="跳转链接" required :error="formErrors.link">
                     <el-input v-model="form.link" placeholder="请输入跳转链接"></el-input>
                 </el-form-item>
 
-                <el-form-item label="排序" required>
+                <el-form-item label="排序" required :error="formErrors.sort">
                     <div class="w-full">
                         <el-input v-model="form.sort" placeholder="0"></el-input>
                         <div class="text-xs text-gray-400 mt-1">*前端展示时，数值越大，越优先展示</div>
                     </div>
                 </el-form-item>
 
-                <el-form-item label="起止时间" required>
+                <el-form-item label="起止时间" required :error="formErrors.dateRange">
                     <el-date-picker
                         v-model="form.dateRange"
                         type="datetimerange"
@@ -352,7 +352,7 @@
                     />
                 </el-form-item>
 
-                <el-form-item label="使用终端" required>
+                <el-form-item label="使用终端" required :error="formErrors.terminals">
                     <el-checkbox-group v-model="form.terminals">
                         <el-checkbox label="安卓">安卓</el-checkbox>
                         <el-checkbox label="iOS">iOS</el-checkbox>
@@ -365,7 +365,7 @@
                     </el-form-item>
                     
                     <div v-if="form.specialRulesEnabled" class="bg-gray-50 p-4 rounded border border-gray-200 ml-4 mb-4">
-                        <el-form-item label="针对用户" required label-width="100px">
+                        <el-form-item label="针对用户" required label-width="100px" :error="formErrors.targetUser">
                             <el-select v-model="form.targetUser" placeholder="不限" class="w-full">
                                 <el-option label="不限" value="unlimited"></el-option>
                                 <el-option label="新用户" value="new"></el-option>
@@ -380,7 +380,7 @@
                             </div>
                         </el-form-item>
 
-                        <el-form-item label="达成目标终止" required label-width="100px">
+                        <el-form-item label="达成目标终止" required label-width="100px" :error="formErrors.targetGoal">
                             <el-select v-model="form.targetGoal" class="w-full">
                                 <el-option label="无" value="none"></el-option>
                                 <el-option label="观看指定直播" value="watch_live"></el-option>
@@ -394,7 +394,7 @@
 
                         <!-- 动态表单项 -->
                         <div v-if="form.targetGoal === 'watch_live'">
-                            <el-form-item label="直播ID" required label-width="100px">
+                            <el-form-item label="直播ID" required label-width="100px" :error="formErrors.goalIds">
                                 <div class="flex items-start w-full">
                                     <div class="flex-1">
                                         <el-input type="textarea" v-model="form.liveIds" :rows="4" placeholder="请输入直播ID (classroom)，每行一个" @input="verifiedResults = []"></el-input>
@@ -419,7 +419,7 @@
                         </div>
 
                         <div v-if="form.targetGoal === 'buy_product'">
-                            <el-form-item label="商品ID" required label-width="100px">
+                            <el-form-item label="商品ID" required label-width="100px" :error="formErrors.goalIds">
                                 <div class="flex items-start w-full">
                                     <div class="flex-1">
                                         <el-input type="textarea" v-model="form.productIds" :rows="4" placeholder="请输入商品ID，每行一个" @input="verifiedResults = []"></el-input>
@@ -445,7 +445,7 @@
                         </div>
 
                         <div v-if="form.targetGoal === 'join_camp'">
-                            <el-form-item label="打卡活动ID" required label-width="100px">
+                            <el-form-item label="打卡活动ID" required label-width="100px" :error="formErrors.goalIds">
                                 <div class="flex items-start w-full">
                                     <div class="flex-1">
                                         <el-input type="textarea" v-model="form.campIds" :rows="4" placeholder="请输入打卡活动ID，每行一个" @input="verifiedResults = []"></el-input>
@@ -471,7 +471,7 @@
                         </div>
 
                         <div v-if="form.targetGoal === 'join_activity'">
-                            <el-form-item label="活动ID" required label-width="100px">
+                            <el-form-item label="活动ID" required label-width="100px" :error="formErrors.goalIds">
                                 <div class="flex items-start w-full">
                                     <div class="flex-1">
                                         <el-input type="textarea" v-model="form.activityIds" :rows="4" placeholder="请输入活动ID，每行一个" @input="verifiedResults = []"></el-input>
@@ -503,7 +503,7 @@
                         </div>
 
                         <div v-if="form.targetGoal === 'submit_form'">
-                            <el-form-item required label-width="100px">
+                            <el-form-item required label-width="100px" :error="formErrors.goalIds">
                                 <template #label>
                                     <span style="white-space: nowrap;">表单ID</span>
                                 </template>
@@ -591,7 +591,17 @@
                 });
                 
                 const formErrors = ref({
-                    visibleDays: ''
+                    name: '',
+                    image: '',
+                    jumpPath: '',
+                    link: '',
+                    sort: '',
+                    dateRange: '',
+                    terminals: '',
+                    targetUser: '',
+                    visibleDays: '',
+                    targetGoal: '',
+                    goalIds: ''
                 });
 
                 // Mock Data based on the image
@@ -726,16 +736,101 @@
 
                 const handleSave = () => {
                     // Reset errors
-                    formErrors.value = { visibleDays: '' };
+                    formErrors.value = {
+                        name: '',
+                        image: '',
+                        jumpPath: '',
+                        link: '',
+                        sort: '',
+                        dateRange: '',
+                        terminals: '',
+                        targetUser: '',
+                        visibleDays: '',
+                        targetGoal: '',
+                        goalIds: ''
+                    };
 
-                    // Validation logic
                     let isValid = true;
-                    if (form.value.specialRulesEnabled && !form.value.visibleDays && form.value.visibleDays !== 0 && form.value.visibleDays !== '0') {
-                        formErrors.value.visibleDays = '请完善填写';
+
+                    // 1. 必填项判空
+                    if (!form.value.name) {
+                        formErrors.value.name = '请输入广告名称';
+                        isValid = false;
+                    }
+                    if (!form.value.image) {
+                        formErrors.value.image = '请上传图片';
+                        isValid = false;
+                    }
+                    if (!form.value.jumpPath) {
+                        formErrors.value.jumpPath = '请选择跳转路径';
+                        isValid = false;
+                    }
+                    if (!form.value.link) {
+                        formErrors.value.link = '请输入跳转链接';
+                        isValid = false;
+                    }
+                    if (form.value.sort === '' || form.value.sort === null || form.value.sort === undefined) {
+                        formErrors.value.sort = '请输入排序值';
+                        isValid = false;
+                    }
+                    if (!form.value.dateRange || form.value.dateRange.length !== 2) {
+                        formErrors.value.dateRange = '请选择起止时间';
+                        isValid = false;
+                    }
+                    if (!form.value.terminals || form.value.terminals.length === 0) {
+                        formErrors.value.terminals = '请至少选择一个使用终端';
+                        isValid = false;
+                    }
+                    
+                    if (form.value.specialRulesEnabled) {
+                        if (!form.value.targetUser) {
+                            formErrors.value.targetUser = '请选择针对用户';
+                            isValid = false;
+                        }
+                        if (!form.value.visibleDays && form.value.visibleDays !== 0 && form.value.visibleDays !== '0') {
+                            formErrors.value.visibleDays = '请完善填写';
+                            isValid = false;
+                        }
+                        if (!form.value.targetGoal) {
+                            formErrors.value.targetGoal = '请选择达成目标终止条件';
+                            isValid = false;
+                        }
+                    }
+
+                    // 2. 链接格式校验
+                    if (form.value.link && !/^https?:\/\//.test(form.value.link)) {
+                        formErrors.value.link = '链接必须以 http:// 或 https:// 开头';
                         isValid = false;
                     }
 
+                    // 3. 时间范围校验 (已通过 el-date-picker 限制，这里做双重保险)
+                    if (form.value.dateRange && form.value.dateRange.length === 2) {
+                        const start = new Date(form.value.dateRange[0]).getTime();
+                        const end = new Date(form.value.dateRange[1]).getTime();
+                        if (start >= end) {
+                            formErrors.value.dateRange = '结束时间必须晚于开始时间';
+                            isValid = false;
+                        }
+                    }
+
+                    // 4. 目标ID校验
+                    if (form.value.specialRulesEnabled && form.value.targetGoal !== 'none' && form.value.targetGoal !== 'add_wechat') {
+                        let targetIds = '';
+                        if (form.value.targetGoal === 'watch_live') targetIds = form.value.liveIds;
+                        else if (form.value.targetGoal === 'buy_product') targetIds = form.value.productIds;
+                        else if (form.value.targetGoal === 'join_camp') targetIds = form.value.campIds;
+                        else if (form.value.targetGoal === 'join_activity') targetIds = form.value.activityIds;
+                        else if (form.value.targetGoal === 'submit_form') targetIds = form.value.formIds;
+
+                        if (!targetIds || !targetIds.trim()) {
+                            formErrors.value.goalIds = '请输入目标ID';
+                            isValid = false;
+                            ElementPlus.ElMessage.error('请填写目标ID');
+                        }
+                    }
+
                     if (!isValid) {
+                        ElementPlus.ElMessage.error('请检查表单填写是否有误');
                         return;
                     }
 
