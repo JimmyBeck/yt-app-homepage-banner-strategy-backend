@@ -367,7 +367,7 @@
                     <div v-if="form.specialRulesEnabled" class="bg-gray-50 p-4 rounded border border-gray-200 ml-4 mb-4">
                         <el-form-item label="针对用户" required label-width="120px" :error="formErrors.targetUser">
                             <div class="w-full">
-                                <el-select v-model="form.targetUser" placeholder="不限" class="w-full">
+                                <el-select v-model="form.targetUser" placeholder="请选择" class="w-full">
                                     <el-option label="不限" value="unlimited"></el-option>
                                     <el-option label="新用户" value="new"></el-option>
                                 </el-select>
@@ -378,9 +378,9 @@
                         </el-form-item>
                         
                         <!-- 新增：针对用户人群包 -->
-                        <el-form-item label="针对用户人群包" label-width="120px" :error="formErrors.targetUserGroup">
-                            <el-select v-model="form.targetUserGroup" placeholder="请选择" class="w-full">
-                                <el-option label="不限" value=""></el-option>
+                        <el-form-item label="针对用户人群包" required label-width="120px" :error="formErrors.targetUserGroup">
+                            <el-select v-model="form.targetUserGroup" placeholder="不限" class="w-full">
+                                <el-option label="不限" value="unlimited"></el-option>
                                 <el-option label="已购买指定商品" value="bought_product"></el-option>
                             </el-select>
                         </el-form-item>
@@ -629,7 +629,7 @@
                     terminals: ['安卓', 'iOS'],
                     specialRulesEnabled: true,
                     targetUser: 'unlimited', // 默认不限
-                    targetUserGroup: '', // 默认不限（空字符串）
+                    targetUserGroup: 'unlimited', // 默认不限
                     purchasedProductIds: 'CP003133000\nCP003133001\nCP003133002',  // 新增字段
                     visibleDays: '',
                     targetGoal: 'buy_product',
@@ -683,7 +683,7 @@
                         terminals: ['安卓', 'iOS'],
                         specialRulesEnabled: true,
                         targetUser: 'unlimited',
-                        targetUserGroup: '', // Reset to default
+                        targetUserGroup: 'unlimited', // Reset to default
                         purchasedProductIds: 'CP003133000\nCP003133001\nCP003133002',
                         formIds: 'jkbjIUOcR\n9duwpJgqX\n_z0QXMHow'
                     };
@@ -881,6 +881,11 @@
                     if (form.value.specialRulesEnabled) {
                         if (!form.value.targetUser) {
                             formErrors.value.targetUser = '请选择针对用户';
+                            isValid = false;
+                        }
+
+                        if (!form.value.targetUserGroup) {
+                            formErrors.value.targetUserGroup = '请选择针对用户人群包';
                             isValid = false;
                         }
 
